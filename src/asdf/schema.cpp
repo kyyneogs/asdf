@@ -29,7 +29,8 @@ void Schema::include(std::string_view name) {
   do {
     if (!fs::exists(name)) {
       std::cout << "[ASDF] schema include error: invalidate file or "
-                   "folder path >>> " << name << "<<<\n";
+                   "folder path >>> "
+                << name << "<<<\n";
       fatalErrorException();
       break;
     }
@@ -38,7 +39,8 @@ void Schema::include(std::string_view name) {
       if (name.ends_with("json")) {
         includeFromFile(name);
       } else {
-        std::cout << "[ASDF] schema include error: invalidate file type >>>" << name << "<<<\n";
+        std::cout << "[ASDF] schema include error: invalidate file type >>>"
+                  << name << "<<<\n";
         fatalErrorException();
         break;
       }
@@ -69,15 +71,17 @@ bool Schema::includeFromFile(std::string_view filename) {
   do {
     auto validSchema = root.find("ASDFSchema");
     if (validSchema == root.not_found()) {
-      std::cout << "[ASDF] schema include error: invalidate json format\n";
+      std::cout << "[ASDF] schema include error from " << filename
+                << "\n       invalidate json format, missing tag ... >>> tag: "
+                   "ASDFSchema <<<\n";
       fatalErrorException();
       break;
     }
 
     auto objectBundleTree = root.find("object");
     if (objectBundleTree == root.not_found()) {
-      std::cout << "[ASDF] schema include error: missing tag ... >>> "
-                   " tag: object <<<\n";
+      std::cout << "[ASDF] schema include error from " << filename
+                << "\n       missing tag ... >>> tag: object <<<\n";
       fatalErrorException();
       break;
     }
@@ -89,24 +93,26 @@ bool Schema::includeFromFile(std::string_view filename) {
       std::queue<ParseParameterData> parserQue;
 
       if (objectNameTree == objectTree.second.not_found()) {
-        std::cout << "[ASDF] schema include error: missing tag ... >>> "
-                     " tag: object::name  <<<\n";
+        std::cout << "[ASDF] schema include error from " << filename
+                  << "\n       missing tag ... >>> tag : object::name < < <\n ";
         fatalErrorException();
         break;
       }
 
       auto objectNameStr = objectNameTree->second.get_value<std::string>();
       if (objectIDTree == objectTree.second.not_found()) {
-        std::cout << "[ASDF] schema include error: missing tag ... object: "
-                  << objectNameStr << ", >>> tag: object::id <<<\n";
+        std::cout << "[ASDF] schema include error from " << filename
+                  << "\n       missing tag ... object: " << objectNameStr
+                  << ", >>> tag: object::id <<<\n";
         fatalErrorException();
         break;
       }
 
       auto objectID = objectIDTree->second.get_value<uint64_t>();
       if (parameterBundleTree == objectTree.second.not_found()) {
-        std::cout << "[ASDF] schema include error: missing tag ... object: "
-                  << objectNameStr << ", >>> tag: object::parameter <<<\n";
+        std::cout << "[ASDF] schema include error from " << filename
+                  << "\n       missing tag ... object: " << objectNameStr
+                  << ", >>> tag: object::parameter <<<\n";
         fatalErrorException();
         break;
       }
@@ -119,9 +125,9 @@ bool Schema::includeFromFile(std::string_view filename) {
         auto parameterTypeTree = parameterTree.second.find("type");
 
         if (parameterNameTree == parameterTree.second.not_found()) {
-          std::cout << "[ASDF] schema include error: missing tag ... "
-                       "object: "
-                    << objectNameStr << ", >>> tag: parameter::name <<<\n";
+          std::cout << "[ASDF] schema include error from " << filename
+                    << "\n       missing tag ... object: " << objectNameStr
+                    << ", >>> tag: parameter::name <<<\n";
           fatalErrorException();
           break;
         }
@@ -130,9 +136,9 @@ bool Schema::includeFromFile(std::string_view filename) {
             parameterNameTree->second.get_value<std::string>();
 
         if (parameterTypeTree == parameterTree.second.not_found()) {
-          std::cout << "[ASDF] schema include error: missing tag ... "
-                       "object: "
-                    << objectNameStr << ", parameter: " << parameterNameStr
+          std::cout << "[ASDF] schema include error from " << filename
+                    << "\n       missing tag ... object: " << objectNameStr
+                    << ", parameter: " << parameterNameStr
                     << ", >>> tag: parameter::type <<<\n";
           fatalErrorException();
           break;
@@ -143,9 +149,9 @@ bool Schema::includeFromFile(std::string_view filename) {
         auto parameterType = getType(parameterTypeStr);
 
         if (parameterType == DataType::NA) {
-          std::cout << "[ASDF] schema include error: unsupported type ... "
-                       "object: "
-                    << objectNameStr << ", parameter: " << parameterNameStr
+          std::cout << "[ASDF] schema include error from " << filename
+                    << "\n       unsupported type ... object: " << objectNameStr
+                    << ", parameter: " << parameterNameStr
                     << ", >>> type: " << parameterTypeStr
                     << " <<<\n"
                        "[ASDF] allowed types are as follows: \n"
@@ -161,9 +167,9 @@ bool Schema::includeFromFile(std::string_view filename) {
         if (parameterType == DataType::STRING) {
           auto stringSizeTree = parameterTree.second.find("size");
           if (stringSizeTree == parameterTree.second.not_found()) {
-            std::cout << "[ASDF] schema include error: missing tag ... "
-                         "object: "
-                      << objectNameStr << ", parameter: " << parameterNameStr
+            std::cout << "[ASDF] schema include error from " << filename
+                      << "\n       missing tag ... object: " << objectNameStr
+                      << ", parameter: " << parameterNameStr
                       << ", type: " << parameterTypeStr
                       << ", >>> tag: parameter::size <<<\n";
             fatalErrorException();
@@ -173,9 +179,9 @@ bool Schema::includeFromFile(std::string_view filename) {
         } else if (parameterType == DataType::OBJECT) {
           auto refTree = parameterTree.second.find("ref");
           if (refTree == parameterTree.second.not_found()) {
-            std::cout << "[ASDF] schema include error: missing tag ... "
-                         "object: "
-                      << objectNameStr << ", parameter: " << parameterNameStr
+            std::cout << "[ASDF] schema include error from " << filename
+                      << "\n       missing tag ... object: " << objectNameStr
+                      << ", parameter: " << parameterNameStr
                       << ", type: " << parameterTypeStr
                       << ", >>> tag: parameter::ref <<<\n";
             fatalErrorException();
@@ -187,12 +193,11 @@ bool Schema::includeFromFile(std::string_view filename) {
           auto refItr = objectMetadataNameMap.find(refHash);
 
           if (refItr == objectMetadataNameMap.end()) {
-            std::cout
-                << "[ASDF] schema include error: cannot find reference ... "
-                   "object: "
-                << objectNameStr << ", parameter: " << parameterNameStr
-                << ", type: " << parameterTypeStr << ", >>> ref: " << refStr
-                << " <<<\n";
+            std::cout << "[ASDF] schema include error from " << filename
+                      << "\n       cannot find reference ... object: "
+                      << objectNameStr << ", parameter: " << parameterNameStr
+                      << ", type: " << parameterTypeStr
+                      << ", >>> ref: " << refStr << " <<<\n";
             fatalErrorException();
             break;
           }
@@ -237,7 +242,7 @@ bool Schema::includeFromFile(std::string_view filename) {
 
       objectMetadataNameMap.insert({objectNameHash, objectMetaData});
     }
-    std::cout << "[ASDF] include succes: " << filename << "\n";
+    std::cout << "[ASDF] schema include succes: " << filename << "\n";
   } while (0);
 
   return true;
