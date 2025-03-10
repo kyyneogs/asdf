@@ -7,20 +7,18 @@ namespace asdf {
 class Object {
    public:
     Object(ObjectMetadata &);
-    Object(const Object &&);
-    Object(const Object &);
     ~Object();
 
-    uint8_t getU8(std::string_view name) const;
+    uint8_t  getU8(std::string_view name) const;
     uint16_t getU16(std::string_view name) const;
     uint32_t getU32(std::string_view name) const;
     uint64_t getU64(std::string_view name) const;
-    int8_t getI8(std::string_view name) const;
-    int16_t getI16(std::string_view name) const;
-    int32_t getI32(std::string_view name) const;
-    int64_t getI64(std::string_view name) const;
-    float getF32(std::string_view name) const;
-    double getF64(std::string_view name) const;
+    int8_t   getI8(std::string_view name) const;
+    int16_t  getI16(std::string_view name) const;
+    int32_t  getI32(std::string_view name) const;
+    int64_t  getI64(std::string_view name) const;
+    float    getF32(std::string_view name) const;
+    double   getF64(std::string_view name) const;
     std::string getString(std::string_view name) const;
 
     void setU8(std::string_view name, const uint8_t &value) const;
@@ -53,10 +51,13 @@ class Object {
     uint64_t offset_;
     bool isAncestor_;
     const bool &isAlive_;
-    AlignBuff *buff_;
+    std::vector<AlignBuff> ancestorBuff_;
+    std::vector<AlignBuff> &buff_;
     ObjectMetadata &metadata_;
     Object &anchestor_;
 };
+
+void fatalErrorException();
 }  // namespace asdf
 
 #endif  // __ASDF_OBJECT_H__

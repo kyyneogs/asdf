@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Data Package Schema",
+  "type": "object",
+  "properties": {
+    "ASDFSchema": {
+      "type": "boolean"
+    },
+    "object": {
+      "type": "array",
+      "description": "사용자 데이터 목록을 정의합니다.",
+      "items": {
+        "type": "object",
+        "description": "사용자 데이터의 구체적인 구조를 정의합니다.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "사용자 데이터의 고유 이름을 정의합니다."
+          },
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "사용자 데이터의 고유 핸들 번호를 정의합니다."
+          },
+          "alignment": {
+            "type": "boolean",
+            "description": "캐싱 효율을 높이기 위한 메모리 정렬을 활성화합니다."
+          },
+          "description": {
+            "type": "string",
+            "description": "사용자 데이터의 설명을 정의합니다."
+          },
+          "parameter": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "데이터의 고유 식별자를 지정합니다."
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "uint8",
+                    "int8",
+                    "uint16",
+                    "int16",
+                    "uint32",
+                    "int32",
+                    "uint64",
+                    "int64",
+                    "float32",
+                    "float64",
+                    "string",
+                    "object"
+                  ],
+                  "description": "데이터의 고유 타입을 지정합니다."
+                },
+                "size": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "문자열 데이터의 크기를 지정합니다. 문자열 데이터가 아닌 경우 무시됩니다."
+                },
+                "ref": {
+                  "type": "string",
+                  "description": "복합 타입의 매개변수의 참조를 지정합니다. 복합 타입이 아닌 경우 무시됩니다."
+                },
+                "array": {
+                  "type": "boolean",
+                  "description": "배열 데이터를 사용합니다."
+                },
+                "cnt": {
+                  "type": "integer",
+                  "description": "배열 데이터의 인덱스 개수를 지정합니다."
+                }
+              },
+              "required": ["name", "type"],
+              "if": { "properties": { "type": { "const": "string" } } },
+              "then": { "required": ["size"] },
+              "else": {
+                "if": { "properties": { "type": { "const": "complex" } } },
+                "then": { "required": ["ref"] }
+              },
+              "dependencies": {
+                "cnt": ["array"]
+              }
+            }
+          }
+        },
+        "required": ["name", "id", "parameter"]
+      }
+    }
+  },
+  "required": ["object", "ASDFSchema"]
+}
