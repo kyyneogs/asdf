@@ -22,10 +22,6 @@
             "minimum": 1,
             "description": "사용자 데이터의 고유 핸들 번호를 정의합니다."
           },
-          "alignment": {
-            "type": "boolean",
-            "description": "캐싱 효율을 높이기 위한 메모리 정렬을 활성화합니다."
-          },
           "description": {
             "type": "string",
             "description": "사용자 데이터의 설명을 정의합니다."
