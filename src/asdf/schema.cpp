@@ -21,7 +21,7 @@ struct ParseParameterData {
 };
 
 DataType getType(const std::string& type);
-size_t getSize(DataType type);
+uint32_t getSize(DataType type);
 
 Schema::Schema() {}
 
@@ -117,9 +117,9 @@ bool Schema::includeFromFile(std::string_view filename) {
         break;
       }
 
-      uint64_t parameterOffset = 0;
-      uint64_t parameterNameMaxSize = 0;
-      uint64_t objectSize = 0;
+      uint32_t parameterOffset = 0;
+      uint32_t parameterNameMaxSize = 0;
+      uint32_t objectSize = 0;
       for (auto& parameterTree : parameterBundleTree->second) {
         auto parameterNameTree = parameterTree.second.find("name");
         auto parameterTypeTree = parameterTree.second.find("type");
@@ -162,7 +162,7 @@ bool Schema::includeFromFile(std::string_view filename) {
           break;
         }
 
-        uint64_t parameterSize = 0;
+        uint32_t parameterSize = 0;
         ObjectMetadata* parameterRef = nullptr;
         if (parameterType == DataType::STRING) {
           auto stringSizeTree = parameterTree.second.find("size");
@@ -175,7 +175,7 @@ bool Schema::includeFromFile(std::string_view filename) {
             fatalErrorException();
             break;
           }
-          parameterSize = stringSizeTree->second.get_value<uint64_t>();
+          parameterSize = stringSizeTree->second.get_value<uint32_t>();
         } else if (parameterType == DataType::OBJECT) {
           auto refTree = parameterTree.second.find("ref");
           if (refTree == parameterTree.second.not_found()) {
@@ -223,7 +223,7 @@ bool Schema::includeFromFile(std::string_view filename) {
         objectSize += parameterSize;
         parameterNameMaxSize = parameterNameMaxSize > parameterNameStr.size()
                                    ? parameterNameMaxSize
-                                   : parameterNameStr.size();
+                                   : static_cast<uint32_t>(parameterNameStr.size());
       }
 
       uint64_t objectNameHash = XXH3_64bits_const(objectNameStr);
@@ -275,8 +275,8 @@ DataType getType(const std::string& type) {
   return type_;
 }
 
-size_t getSize(DataType type) {
-  size_t size = 0;
+uint32_t getSize(DataType type) {
+  uint32_t size = 0;
 
   switch (type) {
     case DataType::NA:
