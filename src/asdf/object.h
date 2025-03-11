@@ -42,6 +42,7 @@ class Object {
 
    private:
     Object(const Object &, ObjectMetadata &, uint64_t, uint64_t);
+    Object(const Object &) = delete;
     bool validate(const std::string_view &, DataType, const uint64_t &,
                   uint64_t &, uint64_t &, uint64_t &) const;
     void print(std::stringstream &, const std::string & = "") const;
@@ -51,8 +52,7 @@ class Object {
     uint64_t offset_;
     bool isAncestor_;
     const bool &isAlive_;
-    std::vector<AlignBuff> ancestorBuff_;
-    std::vector<AlignBuff> &buff_;
+    AlignBuff *buff_;
     ObjectMetadata &metadata_;
     Object &anchestor_;
 };

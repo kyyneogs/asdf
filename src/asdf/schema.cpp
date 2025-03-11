@@ -60,8 +60,12 @@ Object Schema::createObject(std::string_view name) {
     fatalErrorException();
   }
 
-  return (findItr != objectMetadataNameMap.end()) ? Object(findItr->second)
-                                                  : Object(exceptionMetaData);
+  ObjectMetadata* metadata = &exceptionMetaData;
+  if (findItr != objectMetadataNameMap.end()) {
+      metadata = &findItr->second;
+  }
+
+  return Object(*metadata); // RVO
 }
 
 bool Schema::includeFromFile(std::string_view filename) {

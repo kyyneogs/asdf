@@ -1,5 +1,5 @@
 {
-  "$schema": "../types.schema.json",
+  "$schema": "types.schema.json",
   "ASDFSchema": true,
   "object": [
     {
@@ -20,7 +20,7 @@
         { "name": "hour", "type": "float32" },
         { "name": "minasdfefsdfef", "type": "float64" },
         { "name": "nest", "type": "object", "ref": "sub" },
-        { "name": "name", "type": "string", "size": 20 }
+        { "name": "name", "type": "string", "size": 7 }
       ]
     },
     {
