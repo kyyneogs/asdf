@@ -7,6 +7,7 @@ namespace asdf {
 class Object {
    public:
     Object(ObjectMetadata &);
+    Object(const Object &, ObjectMetadata &, uint64_t, uint64_t);
     ~Object();
 
     uint8_t  getU8(std::string_view name) const;
@@ -41,7 +42,6 @@ class Object {
     void print(bool viewAllAncestor = false);
 
    private:
-    Object(const Object &, ObjectMetadata &, uint64_t, uint64_t);
     Object(const Object &) = delete;
     bool validate(const std::string_view &, DataType, const uint64_t &,
                   uint64_t &, uint64_t &, uint64_t &) const;
