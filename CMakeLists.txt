@@ -7,7 +7,9 @@ set(EXPORT_COMPILE_COMMANDS ON)
 find_package(Boost CONFIG)
 
 include_directories(src)
+if(MSVC)
 add_compile_options(/utf-8)
+endif()
 file(GLOB SRC src/asdf/*.cpp src/asdf/*.cc)
 
 add_executable(asdf main.cpp ${SRC})
