@@ -2,6 +2,7 @@
 #define __ASDF_OBJECT_H__
 
 #include "asdf/types.h"
+#include "asdf/array.h"
 
 namespace asdf {
 class Object {
@@ -21,6 +22,7 @@ class Object {
     float    getF32(std::string_view name) const;
     double   getF64(std::string_view name) const;
     std::string getString(std::string_view name) const;
+    Object   getObject(std::string_view name) const;
 
     void setU8(std::string_view name, const uint8_t &value) const;
     void setU16(std::string_view name, const uint16_t &value) const;
@@ -34,7 +36,18 @@ class Object {
     void setF64(std::string_view name, const double &value) const;
     void setString(std::string_view name, const std::string &value) const;
 
-    Object getObject(std::string_view name) const;
+    ArrayU8  getArrayU8(std::string_view name) const;
+    ArrayU16 getArrayU16(std::string_view name) const;
+    ArrayU32 getArrayU32(std::string_view name) const;
+    ArrayU64 getArrayU64(std::string_view name) const;
+    ArrayI8  getArrayI8(std::string_view name) const;
+    ArrayI16 getArrayI16(std::string_view name) const;
+    ArrayI32 getArrayI32(std::string_view name) const;
+    ArrayI64 getArrayI64(std::string_view name) const;
+    ArrayF32 getArrayF32(std::string_view name) const;
+    ArrayF64 getArrayF64(std::string_view name) const;
+    ArrayString getArrayString(std::string_view name) const;
+    ArrayObject getArrayObject(std::string_view name) const;
 
     uint64_t size();
     uint8_t *data();
@@ -44,7 +57,8 @@ class Object {
    private:
     Object(const Object &) = delete;
     bool validate(const std::string_view &, DataType, const uint64_t &,
-                  uint64_t &, uint64_t &, uint64_t &) const;
+                  uint64_t &, uint64_t &, uint64_t &, uint64_t &,
+                  bool = false) const;
     void print(std::stringstream &, const std::string & = "") const;
 
     uint64_t id_;

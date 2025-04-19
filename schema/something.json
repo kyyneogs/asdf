@@ -16,11 +16,11 @@
       "id": 1,
       "alignment": true,
       "parameter": [
-        { "name": "isValid", "type": "uint8" },
+        { "name": "isValid", "type": "uint8", "count": 15 },
         { "name": "hour", "type": "float32" },
         { "name": "minasdfefsdfef", "type": "float64" },
         { "name": "nest", "type": "object", "ref": "sub" },
-        { "name": "name", "type": "string", "size": 7 }
+        { "name": "name", "type": "string", "size": 15, "count": 5 }
       ]
     },
     {

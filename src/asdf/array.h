@@ -7,7 +7,6 @@
 
 namespace asdf {
 class Object;
-namespace array {
 class ArrayU8 {
    public:
     ArrayU8(AlignBuff*, uint32_t, uint32_t);
@@ -150,7 +149,7 @@ class ArrayF64 {
 
 class ArrayString {
    public:
-    ArrayString(AlignBuff*, uint32_t, uint32_t);
+    ArrayString(AlignBuff*, uint32_t, uint32_t, uint32_t);
 
     std::string get(uint64_t index);
     void set(uint64_t index, const std::string& value);
@@ -176,7 +175,6 @@ class ArrayObject {
     uint32_t offset_;
     uint32_t count_;
 };
-}  // namespace array
 }  // namespace asdf
 
 #endif  // __ASDF_ARRAY_H__

@@ -212,6 +212,15 @@ bool Schema::includeFromFile(std::string_view filename) {
           parameterSize = getSize(parameterType);
         }
 
+        bool isArrayType = false;
+        uint32_t parameterCount = 1;
+
+        auto arraySizeTree = parameterTree.second.find("count");
+        if (arraySizeTree != parameterTree.second.not_found()) {
+            isArrayType = true;
+            parameterCount = arraySizeTree->second.get_value<uint32_t>();
+        }
+
         ParseParameterData parseParameterData = {};
         uint64_t parameterNameHash = XXH3_64bits_const(parameterNameStr);
 
@@ -220,11 +229,13 @@ bool Schema::includeFromFile(std::string_view filename) {
         parseParameterData.metadata.size = parameterSize;
         parseParameterData.metadata.ref = parameterRef;
         parseParameterData.metadata.offset = parameterOffset;
+        parseParameterData.metadata.isArray = isArrayType;
+        parseParameterData.metadata.count = parameterCount;
         parseParameterData.hash = parameterNameHash;
         parserQue.push(parseParameterData);
 
-        parameterOffset += parameterSize;
-        objectSize += parameterSize;
+        parameterOffset += parameterSize * parameterCount;
+        objectSize += parameterSize * parameterCount;
         parameterNameMaxSize = parameterNameMaxSize > parameterNameStr.size()
                                    ? parameterNameMaxSize
                                    : static_cast<uint32_t>(parameterNameStr.size());

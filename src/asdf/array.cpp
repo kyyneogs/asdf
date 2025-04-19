@@ -4,7 +4,6 @@
 #include "asdf/types.h"
 
 namespace asdf {
-namespace array {
 static ObjectMetadata exceptionMetaData = {};
 
 ArrayU8::ArrayU8(AlignBuff* buff, uint32_t offset, uint32_t count) {
@@ -227,10 +226,11 @@ void ArrayF64::set(uint64_t index, double value) {
     }
 }
 
-ArrayString::ArrayString(AlignBuff* buff, uint32_t offset, uint32_t count) {
+ArrayString::ArrayString(AlignBuff* buff, uint32_t offset, uint32_t count, uint32_t size) {
     buff_ = buff;
     offset_ = offset;
     count_ = count;
+    size_ = size;
 }
 
 std::string ArrayString::get(uint64_t index) {
@@ -268,5 +268,4 @@ Object ArrayObject::get(uint64_t index) {
 
     return Object(object_, metadata_, offset, size);
 }
-}  // namespace array
 }  // namespace asdf
